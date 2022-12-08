@@ -19,9 +19,11 @@ export class AppService {
     const users = input.users;
     const posts = input.posts;
 
-    //Creamos el objeto de respuesta con el formato bueno
+    //Creamos los objetos de respuesta con el formato bueno
     const goodObject: DataOutputDTO = { users: [], posts: [] };
+    const goodRelationObject: DataOutputDTO = { users: [], posts: [] };
 
+    //ESTE BUCLE ES PARA GENERAR EL ARCHIVO DE SALIDA CON EL FORMARO PEDIDO
     //Generamos el array de las entidades user
     for (const user of users) {
       const newEntity: UserEntity = new UserEntity();
@@ -33,7 +35,7 @@ export class AppService {
       newEntity.age = user[4];
 
       //Añadimos la entidad al objeto final
-      goodObject['users'].push(newEntity);
+      goodObject.users.push(newEntity);
     }
 
     //Generamos el array de las entidades post
@@ -50,6 +52,43 @@ export class AppService {
       goodObject.posts.push(newEntity);
     }
 
+    //EL PRIMER BUCLE ES PARA GENERAR EL OBJETO CON LAS RELACIONES INICIALIZADAS PARA SU DEPLOY
+    //Generamos el array de las entidades user
+    for (const user of users) {
+      const newEntity: UserEntity = new UserEntity();
+      
+      newEntity.id = user[0];
+      newEntity.name = user[1];
+      newEntity.lastName = user[2];
+      newEntity.email = user[3];
+      newEntity.age = user[4];
+
+      //Relación para la base de datos
+      goodRelationObject.users.push(newEntity);
+    }
+
+    //Generamos el array de las entidades post
+    for (const post of posts) {
+      const newEntity: PostEntity = new PostEntity();
+      
+      newEntity.userId = post[0];
+      newEntity.title = post[1];
+      newEntity.content = post[2];
+      newEntity.createdAt = post[3];
+      newEntity.published = post[4];
+
+      //Relación para la base de datos
+      goodRelationObject.posts.push(newEntity);
+
+      goodRelationObject.users.find((userEntity, index) => {
+        newEntity.userId === userEntity.id ? 
+          goodRelationObject.users[index].posts === undefined ?
+            goodRelationObject.users[index].posts = [newEntity] : 
+            goodRelationObject.users[index].posts.push(newEntity) 
+        : null;
+      });
+    }
+
     //Se imprimen los datos en output.json
     fs.writeFileSync("./src/output.json", JSON.stringify(goodObject), "utf-8");
 
@@ -57,6 +96,6 @@ export class AppService {
     //console.log(fs.readFileSync("./src/output.json", "utf-8"));
 
     //Los devolvemos con la llamada
-    return goodObject;
+    return goodRelationObject;
   }
 }

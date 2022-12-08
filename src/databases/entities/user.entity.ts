@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { PostEntity } from './post.entity';
 
 @Entity()
@@ -19,5 +19,5 @@ export class UserEntity {
   age: number;
 
   @OneToMany(() => PostEntity, (post) => post.user)
-  posts: PostEntity[]
+  posts?: PostEntity[]
 }

@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -18,5 +18,5 @@ export class PostEntity {
   published: boolean;
 
   @ManyToOne(() => UserEntity, (user) => user.posts)
-  user: UserEntity;
+  user?: UserEntity;
 }
