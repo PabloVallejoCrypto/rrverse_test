@@ -18,4 +18,6 @@ export class UserEntity {
   @Column(() => String)
   age: number;
 
+  @OneToMany(() => PostEntity, (post) => post.user)
+  posts: PostEntity[]
 }
