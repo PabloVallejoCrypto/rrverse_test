@@ -19,10 +19,10 @@ import { PostEntity } from './databases/entities/post.entity';
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'mysql',
-        host: "database-1.cks0l3wtcnne.eu-west-1.rds.amazonaws.com",
-        port: 3306,
-        username: "admin",
-        password: "adminadminadmin",
+        host: process.env.DATABASE_HOST,
+        port: parseInt(process.env.DATABASE_PORT) || 3306,
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
         database: "data",
         entities: [
           UserEntity,
