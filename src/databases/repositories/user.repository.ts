@@ -1,5 +1,5 @@
-import {DataSource, Repository, Table, TableForeignKey} from 'typeorm';
-import {Injectable} from '@nestjs/common';
+import {DataSource, Repository, TableForeignKey} from 'typeorm';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
@@ -11,14 +11,18 @@ export class UserRepository extends Repository<UserEntity>
     }
 
     async getAll(): Promise<any> {
-        const response0 = await this.query(
-            'SELECT * FROM user_entity'
-        );
-        const response1 = await this.query(
-            'SELECT * FROM post_entity'
-        );
+        try {
+            const response0 = await this.query(
+                'SELECT * FROM user_entity'
+            );
+            const response1 = await this.query(
+                'SELECT * FROM post_entity'
+            );
 
-        return [response0, response1];
+            return [response0, response1];
+        } catch {
+            throw new HttpException('No quedan datos.', HttpStatus.I_AM_A_TEAPOT);
+        }
     }
 
     async init(): Promise<boolean> {
@@ -45,16 +49,20 @@ export class UserRepository extends Repository<UserEntity>
     }
 
     async deleteAll(): Promise<boolean> {
-        const response1 = await this.query(
-            'DROP TABLE post_entity'
-        );
-
-        const response0 = await this.query(
-            'DROP TABLE user_entity'
-        );
-
-        console.log("Deleting");
-
-        return true;
+        try {
+            const response1 = await this.query(
+                'DROP TABLE post_entity'
+            );
+    
+            const response0 = await this.query(
+                'DROP TABLE user_entity'
+            );
+    
+            console.log("Deleting");
+            
+            return true;
+        } catch {
+            return false;
+        }
     }
 }

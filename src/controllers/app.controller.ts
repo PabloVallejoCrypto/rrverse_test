@@ -14,6 +14,16 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get("getAllData")
+  async getAllData(): Promise<any> {
+    return this.appService.getAllData();
+  }
+
+  @Get("deleteData")
+  async deleteData(): Promise<any> {
+    return this.appService.deleteData();
+  }
+
   @Post()
   async getData(
     //Recogemos los datos del body con la etiqueta Body() y compobamos su tipo

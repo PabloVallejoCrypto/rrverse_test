@@ -20,6 +20,15 @@ export class AppService {
     return 'Hello World!';
   }
 
+  //Datos basicos
+  async getAllData(): Promise<any> {
+    return await this.userService.getALl();
+  }
+  //Borrar datos de la ddbb
+  async deleteData(): Promise<any> {
+    return await this.userService.deleteAll();
+  }
+
   //Tratado de datos
   async getData(input: DataInputDTO): Promise<DataOutputDTO> {
     //Separamos los usuarios de los posts
@@ -28,10 +37,8 @@ export class AppService {
 
     //Creamos los objetos de respuesta con el formato bueno
     const goodObject: DataOutputDTO = { users: [], posts: [] };
-    const goodRelationObject: DataOutputDTO = { users: [], posts: [] };
 
-    //ESTE BUCLE ES PARA GENERAR EL ARCHIVO DE SALIDA CON EL FORMARO PEDIDO
-    //Sin la base de datos solo es necesario este bucle
+    //BUCLE PARA GENERAR EL ARCHIVO DE SALIDA CON EL FORMARO PEDIDO
     //Generamos el array de las entidades user
     for (const user of users) {
       const newEntity: UserEntity = new UserEntity();
@@ -99,6 +106,6 @@ export class AppService {
     );
 
     //Los devolvemos con la llamada
-    return goodRelationObject;
+    return goodObject;
   }
 }
